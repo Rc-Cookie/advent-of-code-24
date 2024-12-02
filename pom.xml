@@ -6,7 +6,7 @@
 
   <groupId>de.rccookie</groupId>
   <artifactId>advent-of-code-24</artifactId>
-  <version>1.0.0</version>
+  <version>1.2.1</version>
 
   <properties>
     <maven.compiler.source>21</maven.compiler.source>
@@ -25,7 +25,7 @@
     <dependency>
       <groupId>de.rccookie</groupId>
       <artifactId>advent-of-code-runner</artifactId>
-      <version>1.7.1</version>
+      <version>1.7.2</version>
     </dependency>
     <dependency>
       <groupId>de.rccookie</groupId>
