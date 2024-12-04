@@ -17,14 +17,16 @@ They are generally a lot easier to read and use similar algorithms, but are quit
 Some performance stats of the optimized solutions, which have been obtained using `--all --warmup 100 --repeat 100` on my AMD Ryzen 9 5950x:
 
 ```
-Duration (average of 100 runs): 0.751773ms
+Duration (average of 100 runs): 1.93323ms
 ┌───────╥─────────┬─────────┐
 │       ║  Task 1 │  Task 2 │
 ╞═══════╬═════════╪═════════╡
-│ Day 1 ║ 0.273ms │ 0.099ms │
+│ Day 1 ║ 0.489ms │ 0.176ms │
 ├───────╫─────────┼─────────┤
-│ Day 2 ║ 0.094ms │ 0.250ms │
+│ Day 2 ║ 0.160ms │ 0.268ms │
 ├───────╫─────────┼─────────┤
-│ Day 3 ║ 0.021ms │ 0.015ms │
+│ Day 3 ║ 0.061ms │ 0.023ms │
+├───────╫─────────┼─────────┤
+│ Day 4 ║ 0.531ms │ 0.225ms │
 └───────╨─────────┴─────────┘
 ```
