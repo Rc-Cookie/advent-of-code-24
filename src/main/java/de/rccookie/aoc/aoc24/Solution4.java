@@ -2,7 +2,9 @@ package de.rccookie.aoc.aoc24;
 
 public class Solution4 extends FastSolution {
 
-    private int width, height, tl, tr, bl, br;
+    private static final int MXS = 'M' ^ 'S';
+
+    private int width, height, tl, tr, bl, br, r, b;
 
     private void init() {
         width = indexOf('\n', 0);
@@ -11,31 +13,63 @@ public class Solution4 extends FastSolution {
         tr = -width;
         bl = width;
         br = width + 2;
+        r = 1;
+        b = width + 1;
     }
 
     @Override
     public Object task1() {
         init();
 
-        int count = 0;
-        for(int x=-1; x<=1; x++) for(int y=-1; y<=1; y++)
-            if(x != 0 || y != 0)
-                count += checkDirection(x,y);
-        return count;
-    }
-
-    private int checkDirection(int stepX, int stepY) {
-        int mr = stepX > 0 ? 3 : 0;
-        int mb = stepY > 0 ? 3 : 0;
-        int mt = stepY < 0 ? 3 : 0;
-        int step = stepX + (width+1) * stepY;
-        int count = 0;
-        for(int x = stepX<0?3:0; x < width - mr; x++) {
-            for(int y = mt; y < height - mb; y++) {
-                if(checkXMAS(x, y, step))
-                    count++;
+        int count = 0, x, y, p;
+        for(x=0; x<width-3; x++) for(y=0; y<3; y++) {
+            p = x + (width + 1) * y;
+            if(chars[p] == 'X') {
+                if(checkMAS(p, r)) count++;
+                if(checkMAS(p, br)) count++;
+                if(checkMAS(p, b)) count++;
+            } else if(chars[p] == 'S') {
+                if(checkAMX(p, r)) count++;
+                if(checkAMX(p, br)) count++;
+                if(checkAMX(p, b)) count++;
             }
         }
+
+        for(x=0; x<width-3; x++) for(y=3; y<height-3; y++) {
+            p = x + (width + 1) * y;
+            if(chars[p] == 'X') {
+                if(checkMAS(p, r)) count++;
+                if(checkMAS(p, br)) count++;
+                if(checkMAS(p, b)) count++;
+                if(checkMAS(p, tr)) count++;
+            } else if(chars[p] == 'S') {
+                if(checkAMX(p, r)) count++;
+                if(checkAMX(p, br)) count++;
+                if(checkAMX(p, b)) count++;
+                if(checkAMX(p, tr)) count++;
+            }
+        }
+
+        for(x=0; x<width-3; x++) for(y=height-3; y<height; y++) {
+            p = x + (width + 1) * y;
+            if(chars[p] == 'X') {
+                if(checkMAS(p, r)) count++;
+                if(checkMAS(p, tr)) count++;
+            } else if(chars[p] == 'S') {
+                if(checkAMX(p, r)) count++;
+                if(checkAMX(p, tr)) count++;
+            }
+        }
+
+        for(x=width-3; x<width; x++) for(y=0; y<height-3; y++) {
+            p = x + (width + 1) * y;
+            if(chars[p] == 'X') {
+                if(checkMAS(p, b)) count++;
+            } else if(chars[p] == 'S') {
+                if(checkAMX(p, b)) count++;
+            }
+        }
+
         return count;
     }
 
@@ -44,19 +78,18 @@ public class Solution4 extends FastSolution {
         init();
 
         int count = 0;
-        for(int x=0; x<width-2; x++) for(int y=0; y<height-2; y++)
-            if((checkMAS(x, y, br) || checkMAS(x+2, y+2, tl)) && (checkMAS(x+2, y, bl) || checkMAS(x, y+2, tr)))
-                count++;
+        for(int x=1; x<width-1; x++) for(int y=1; y<height-1; y++) {
+            int p = x + (width+1) * y;
+            if(chars[p] == 'A' && (chars[p+tl] ^ chars[p+br]) == MXS && (chars[p+tr] ^ chars[p+bl]) == MXS) count++;
+        }
         return count;
     }
 
-    private boolean checkXMAS(int x, int y, int step) {
-        int start = x + (width+1) * y;
-        return chars[start] == 'X' && chars[start + step] == 'M' && chars[start + 2*step] == 'A' && chars[start + 3*step] == 'S';
+    private boolean checkMAS(int p, int step) {
+        return chars[p+step] == 'M' && chars[p+2*step] == 'A' && chars[p+3*step] == 'S';
     }
 
-    private boolean checkMAS(int x, int y, int step) {
-        int start = x + (width+1) * y;
-        return chars[start] == 'M' && chars[start + step] == 'A' && chars[start + 2*step] == 'S';
+    private boolean checkAMX(int p, int step) {
+        return chars[p+step] == 'A' && chars[p+2*step] == 'M' && chars[p+3*step] == 'X';
     }
 }
