@@ -6,12 +6,12 @@ public class Solution7 extends FastSolution {
     private final int[] nums = new int[50];
     private final long[] lowerBounds = new long[nums.length];
     private final long[] magnitudes = new long[nums.length];
-    private int numCount;
+    private int numCount, multiplicationFeasibleCount;
 
     @Override
     public Object task1() {
 
-        long total = 0, maxIncrement;
+        long total = 0, maxIncrement, remainingTarget;
         int first, i, pos = 0;
 
         while(pos < chars.length - 1) {
@@ -41,7 +41,13 @@ public class Solution7 extends FastSolution {
                 lowerBounds[i] = (target-1) / maxIncrement;
             }
 
-            if(computablePlusMinus(first, 0))
+            // This is only possible for part 1 because in part 2 we cannot assume addition as the only alternative
+            multiplicationFeasibleCount = numCount;
+            remainingTarget = target;
+            while(multiplicationFeasibleCount > 0 && remainingTarget % nums[multiplicationFeasibleCount-1] != 0)
+                remainingTarget -= nums[--multiplicationFeasibleCount];
+
+            if(computablePlusMultiply(first, 0))
                 total += target;
         }
 
@@ -84,31 +90,31 @@ public class Solution7 extends FastSolution {
                 lowerBounds[i] = target / maxIncrement;
             }
 
-            if(computablePlusMinusConcat(first, 0))
+            if(computablePlusMultiplyConcat(first, 0))
                 total += target;
         }
 
         return total;
     }
 
-    private boolean computablePlusMinus(long current, int nextIndex) {
+    private boolean computablePlusMultiply(long current, int nextIndex) {
         if(current == target)
             return true;
         if(current > target || nextIndex >= numCount || current < lowerBounds[nextIndex])
             return false;
         long x = nums[nextIndex];
-        return computablePlusMinus(current + x, nextIndex + 1) ||
-                computablePlusMinus(current * x, nextIndex + 1);
+        return computablePlusMultiply(current + x, nextIndex + 1) ||
+                (nextIndex < multiplicationFeasibleCount && computablePlusMultiply(current * x, nextIndex + 1));
     }
 
-    private boolean computablePlusMinusConcat(long current, int nextIndex) {
+    private boolean computablePlusMultiplyConcat(long current, int nextIndex) {
         if(current == target)
             return true;
         if(current > target || nextIndex >= numCount || current < lowerBounds[nextIndex])
             return false;
         long x = nums[nextIndex];
-        return computablePlusMinusConcat(current + x, nextIndex + 1) ||
-                computablePlusMinusConcat(current * x, nextIndex + 1) ||
-                computablePlusMinusConcat(current * magnitudes[nextIndex] + x, nextIndex + 1);
+        return computablePlusMultiplyConcat(current + x, nextIndex + 1) ||
+                computablePlusMultiplyConcat(current * x, nextIndex + 1) ||
+                computablePlusMultiplyConcat(current * magnitudes[nextIndex] + x, nextIndex + 1);
     }
 }
