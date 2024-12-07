@@ -81,7 +81,7 @@ public class Solution7 extends FastSolution {
             maxIncrement = 1;
             for(i=numCount-1; i>=0; i--) {
                 maxIncrement *= magnitudes[i];
-                lowerBounds[i] = (target) / maxIncrement;
+                lowerBounds[i] = target / maxIncrement;
             }
 
             if(computablePlusMinusConcat(first, 0))
