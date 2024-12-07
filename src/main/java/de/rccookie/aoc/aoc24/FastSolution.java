@@ -182,4 +182,36 @@ public abstract class FastSolution extends Solution {
             arr[i] = ints.get(i);
         return arr;
     }
+
+    /**
+     * Parses a list of integers with arbitrary delimiters into an array using 64 signed
+     * integers. Leading and trailing "stuff" will be ignored.
+     *
+     * @param str The string to parse the list from
+     * @return The list of longs
+     */
+    public static long[] parseLongs(String str) {
+        List<Long> longs = new ArrayList<>();
+        int i = 0, len = str.length();
+        long x;
+        char c;
+        outer: while(true) {
+            do if(i >= len) break outer;
+            while((c = str.charAt(i++)) < '0' || c > '9');
+
+            x = c - '0';
+            if(i < len) {
+                while((c = str.charAt(i)) >= '0' && c <= '9') {
+                    x = 10 * x + c - '0';
+                    if(++i >= len)
+                        break;
+                }
+            }
+            longs.add(x);
+        }
+        long[] arr = new long[longs.size()];
+        for(i=0; i<arr.length; i++)
+            arr[i] = longs.get(i);
+        return arr;
+    }
 }
