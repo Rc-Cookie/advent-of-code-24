@@ -16,7 +16,7 @@ public class Solution7 extends FastSolution {
                 lowerBounds[i] = (nums[0]-1) / maxIncrement;
             }
 
-            return computablePlusMinus(nums[0], nums[1], nums, lowerBounds, 2) ? nums[0] : 0;
+            return computablePlusMultiply(nums[0], nums[1], nums, lowerBounds, 2) ? nums[0] : 0;
         });
     }
 
@@ -39,28 +39,28 @@ public class Solution7 extends FastSolution {
                 lowerBounds[i] = nums[0] / maxIncrement;
             }
 
-            return computablePlusMinusConcat(nums[0], nums[1], nums, magnitudes, lowerBounds, 2) ? nums[0] : 0;
+            return computablePlusMultiplyConcat(nums[0], nums[1], nums, magnitudes, lowerBounds, 2) ? nums[0] : 0;
         });
     }
 
-    private boolean computablePlusMinus(long target, long current, long[] nums, long[] lowerBounds, int nextIndex) {
+    private boolean computablePlusMultiply(long target, long current, long[] nums, long[] lowerBounds, int nextIndex) {
         if(current == target)
             return true;
         if(current > target || nextIndex >= nums.length || current < lowerBounds[nextIndex])
             return false;
         long x = nums[nextIndex];
-        return computablePlusMinus(target, current + x, nums, lowerBounds, nextIndex + 1) ||
-                computablePlusMinus(target, current * x, nums, lowerBounds, nextIndex + 1);
+        return computablePlusMultiply(target, current + x, nums, lowerBounds, nextIndex + 1) ||
+                computablePlusMultiply(target, current * x, nums, lowerBounds, nextIndex + 1);
     }
 
-    private boolean computablePlusMinusConcat(long target, long current, long[] nums, int[] magnitudes, long[] lowerBounds, int nextIndex) {
+    private boolean computablePlusMultiplyConcat(long target, long current, long[] nums, int[] magnitudes, long[] lowerBounds, int nextIndex) {
         if(current == target)
             return true;
         if(current > target || nextIndex >= nums.length || current < lowerBounds[nextIndex])
             return false;
         long x = nums[nextIndex];
-        return computablePlusMinusConcat(target, current + x, nums, magnitudes, lowerBounds, nextIndex + 1) ||
-                computablePlusMinusConcat(target, current * x, nums, magnitudes, lowerBounds, nextIndex + 1) ||
-                computablePlusMinusConcat(target, current * magnitudes[nextIndex] + x, nums, magnitudes, lowerBounds, nextIndex + 1);
+        return computablePlusMultiplyConcat(target, current + x, nums, magnitudes, lowerBounds, nextIndex + 1) ||
+                computablePlusMultiplyConcat(target, current * x, nums, magnitudes, lowerBounds, nextIndex + 1) ||
+                computablePlusMultiplyConcat(target, current * magnitudes[nextIndex] + x, nums, magnitudes, lowerBounds, nextIndex + 1);
     }
 }
