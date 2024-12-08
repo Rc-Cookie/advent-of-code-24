@@ -25,12 +25,6 @@ public class Solution8 extends FastSolution {
             }
         }
 
-        for(int y=0; y<size.y(); y++) {
-            for(int x=0; x<size.x(); x++)
-                System.out.print(antiNodes.contains(new int2(x,y)) ? '#' : '.');
-            System.out.println();
-        }
-
         return antiNodes.size();
     }
 
@@ -46,12 +40,6 @@ public class Solution8 extends FastSolution {
                     addAllIfInBounds(b, ab, antiNodes);
                 }
             }
-        }
-
-        for(int y=0; y<size.y(); y++) {
-            for(int x=0; x<size.x(); x++)
-                System.out.print(antiNodes.contains(new int2(x,y)) ? '#' : '.');
-            System.out.println();
         }
 
         return antiNodes.size();
