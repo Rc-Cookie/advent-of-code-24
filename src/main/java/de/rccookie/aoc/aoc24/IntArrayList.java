@@ -8,7 +8,7 @@ import java.util.function.IntConsumer;
 
 import org.jetbrains.annotations.NotNull;
 
-public class IntArrayList implements Iterable<Integer> {
+public final class IntArrayList implements Iterable<Integer> {
 
     public int[] data;
     public int size = 0;
