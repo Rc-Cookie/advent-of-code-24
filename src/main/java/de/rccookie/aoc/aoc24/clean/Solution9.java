@@ -80,8 +80,6 @@ public class Solution9 extends FastSolution {
         for(int i=0; i<len; i++)
             checksum += (long) i * Math.max(0, fs[i]);
 
-//        System.out.println("|"+Arrays.stream(fs).limit(len).mapToObj(i -> i < 0 ? "____" : " ".repeat(4-(""+i).length()) + i).collect(Collectors.joining("|"))+"|");
-
         return checksum;
     }
 }
