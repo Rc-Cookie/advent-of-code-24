@@ -1,8 +1,5 @@
 package de.rccookie.aoc.aoc24.clean;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 import de.rccookie.aoc.aoc24.FastSolution;
 
 public class Solution9 extends FastSolution {
@@ -42,8 +39,6 @@ public class Solution9 extends FastSolution {
     public Object task2() {
         int[] fs = new int[9 * chars.length];
         int len = loadFS(fs);
-
-        System.out.println("|"+Arrays.stream(fs).limit(len).mapToObj(i -> i < 0 ? "____" : " ".repeat(4-(""+i).length()) + i).collect(Collectors.joining("|"))+"|");
 
         int firstFree = 0;
         while(fs[firstFree] != -1) firstFree++;
