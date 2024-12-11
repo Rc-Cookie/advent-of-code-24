@@ -114,7 +114,7 @@ public class Solution9 extends FastSolution {
         for(int cur, bigger; i>=0; --i) {
             cur = gaps[i].data[0];
             bigger = firstGap[i+1];
-            if(cur < bigger) {
+            if(cur <= bigger) {
                 firstGap[i] = cur;
                 firstGapSize[i] = i;
             }
