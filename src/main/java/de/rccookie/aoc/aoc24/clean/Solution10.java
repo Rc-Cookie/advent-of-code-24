@@ -1,8 +1,5 @@
 package de.rccookie.aoc.aoc24.clean;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import de.rccookie.aoc.aoc24.FastSolution;
 import de.rccookie.math.int2;
 
@@ -10,29 +7,26 @@ public class Solution10 extends FastSolution {
 
     @Override
     public Object task1() {
-        int count = 0;
-        for(int2 p : size)
-            count += searchRecursive(p, '0', new HashSet<>());
-        return count;
+        return grid.sum(p -> {
+            grid.clearMarked();
+            return searchRecursive(p, '0', true);
+        });
     }
 
     @Override
     public Object task2() {
-        int count = 0;
-        for(int2 p : size)
-            count += searchRecursive(p, '0', null);
-        return count;
+        return grid.sum(p -> searchRecursive(p, '0', false));
     }
 
 
-    private int searchRecursive(int2 pos, char expected, Set<int2> dejavu) {
-        if(!(pos.geq(int2.zero) && pos.less(size)) || charAt(pos) != expected || (dejavu != null && !dejavu.add(pos)))
+    private int searchRecursive(int2 pos, char expected, boolean distinct) {
+        if(grid.charAt(pos) != expected || (distinct && !grid.mark(pos)))
             return 0;
         if(expected == '9')
             return 1;
-        return searchRecursive(pos.added(0, 1), (char) (expected + 1), dejavu) +
-                searchRecursive(pos.added(0, -1), (char) (expected + 1), dejavu) +
-                searchRecursive(pos.added(1, 0), (char) (expected + 1), dejavu) +
-                searchRecursive(pos.added(-1, 0), (char) (expected + 1), dejavu);
+        return searchRecursive(pos.added(0, 1), (char) (expected + 1), distinct) +
+                searchRecursive(pos.added(0, -1), (char) (expected + 1), distinct) +
+                searchRecursive(pos.added(1, 0), (char) (expected + 1), distinct) +
+                searchRecursive(pos.added(-1, 0), (char) (expected + 1), distinct);
     }
 }
