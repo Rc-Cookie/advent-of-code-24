@@ -1,23 +1,23 @@
-package de.rccookie.aoc.aoc24;
+package de.rccookie.aoc.aoc24.util;
 
 import java.util.Arrays;
 import java.util.PrimitiveIterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.function.LongConsumer;
+import java.util.function.IntConsumer;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class LongArrayList implements Iterable<Long> {
+public final class IntArrayList implements Iterable<Integer> {
 
-    public long[] data;
+    public int[] data;
     public int size = 0;
 
-    public LongArrayList(int initialCapacity) {
-        data = new long[initialCapacity];
+    public IntArrayList(int initialCapacity) {
+        data = new int[initialCapacity];
     }
 
-    public LongArrayList() {
+    public IntArrayList() {
         this(8);
     }
 
@@ -34,19 +34,19 @@ public final class LongArrayList implements Iterable<Long> {
         return size == 0;
     }
 
-    public long get(int index) {
+    public int get(int index) {
         if(index >= size)
             throw new IndexOutOfBoundsException(index);
         return data[index];
     }
 
-    public void add(long x) {
+    public void add(int x) {
         if(data.length == size)
             data = Arrays.copyOf(data, 2 * size);
         data[size++] = x;
     }
 
-    public void add(int index, long x) {
+    public void add(int index, int x) {
         if(index < 0 || index > size)
             throw new IndexOutOfBoundsException(index);
         if(data.length == size)
@@ -73,11 +73,11 @@ public final class LongArrayList implements Iterable<Long> {
 
     @NotNull
     @Override
-    public PrimitiveIterator.OfLong iterator() {
-        return new PrimitiveIterator.OfLong() {
+    public PrimitiveIterator.OfInt iterator() {
+        return new PrimitiveIterator.OfInt() {
             int i = 0;
             @Override
-            public long nextLong() {
+            public int nextInt() {
                 return data[i++];
             }
 
@@ -88,13 +88,13 @@ public final class LongArrayList implements Iterable<Long> {
         };
     }
 
-    public void forEachLong(LongConsumer action) {
+    public void forEachInt(IntConsumer action) {
         for(int i=0; i<size; i++)
             action.accept(data[i]);
     }
 
     @Override
-    public Spliterator.OfLong spliterator() {
+    public Spliterator.OfInt spliterator() {
         return Spliterators.spliterator(data, 0, size, Spliterator.NONNULL | Spliterator.ORDERED | Spliterator.CONCURRENT);
     }
 }

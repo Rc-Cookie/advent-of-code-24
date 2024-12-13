@@ -1,4 +1,4 @@
-package de.rccookie.aoc.aoc24;
+package de.rccookie.aoc.aoc24.util;
 
 import java.util.Arrays;
 

@@ -1,5 +1,8 @@
 package de.rccookie.aoc.aoc24;
 
+import de.rccookie.aoc.aoc24.util.FastSolution;
+import de.rccookie.aoc.aoc24.util.IntHeap;
+
 public class Solution9 extends FastSolution {
     @Override
     public Object task1() {

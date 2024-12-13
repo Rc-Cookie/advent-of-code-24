@@ -3,7 +3,7 @@ package de.rccookie.aoc.aoc24.clean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.rccookie.aoc.aoc24.FastSolution;
+import de.rccookie.aoc.aoc24.util.FastSolution;
 
 public class Solution3 extends FastSolution {
 

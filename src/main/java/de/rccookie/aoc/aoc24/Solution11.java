@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.rccookie.aoc.aoc24.util.FastSolution;
 import de.rccookie.util.Utils;
 
 public class Solution11 extends FastSolution {

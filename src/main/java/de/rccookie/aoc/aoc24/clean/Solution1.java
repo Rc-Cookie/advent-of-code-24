@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.rccookie.aoc.aoc24.FastSolution;
+import de.rccookie.aoc.aoc24.util.FastSolution;
 import de.rccookie.math.intN;
 
 public class Solution1 extends FastSolution {

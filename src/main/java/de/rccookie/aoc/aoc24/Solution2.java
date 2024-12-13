@@ -3,6 +3,8 @@ package de.rccookie.aoc.aoc24;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
+import de.rccookie.aoc.aoc24.util.FastSolution;
+
 public class Solution2 extends FastSolution {
 
     @Override

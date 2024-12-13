@@ -1,5 +1,7 @@
 package de.rccookie.aoc.aoc24;
 
+import de.rccookie.aoc.aoc24.util.FastSolution;
+
 public class Solution5 extends FastSolution {
 
     private final long[] rules = new long[(128*128+63)/64];

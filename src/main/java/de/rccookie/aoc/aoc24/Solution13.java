@@ -1,5 +1,7 @@
 package de.rccookie.aoc.aoc24;
 
+import de.rccookie.aoc.aoc24.util.FastSolution;
+
 public class Solution13 extends FastSolution {
     @Override
     public Object task1() {

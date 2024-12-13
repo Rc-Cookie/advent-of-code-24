@@ -3,7 +3,7 @@ package de.rccookie.aoc.aoc24.clean;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.rccookie.aoc.aoc24.FastSolution;
+import de.rccookie.aoc.aoc24.util.FastSolution;
 import de.rccookie.graph.Graph;
 import de.rccookie.graph.HashGraph;
 import de.rccookie.util.ListStream;

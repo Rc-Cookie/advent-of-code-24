@@ -1,5 +1,8 @@
 package de.rccookie.aoc.aoc24;
 
+import de.rccookie.aoc.aoc24.util.FastSolution;
+import de.rccookie.aoc.aoc24.util.IntArrayList;
+
 public class Solution8 extends FastSolution {
 
     private int vec(int x, int y) {

@@ -1,5 +1,8 @@
 package de.rccookie.aoc.aoc24;
 
+import de.rccookie.aoc.aoc24.util.FastSolution;
+import de.rccookie.aoc.aoc24.util.IntArrayDeque;
+
 public class Solution12 extends FastSolution {
 
     @Override
