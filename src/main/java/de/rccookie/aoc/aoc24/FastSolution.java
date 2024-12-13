@@ -1,7 +1,6 @@
 package de.rccookie.aoc.aoc24;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import de.rccookie.aoc.Solution;
 
@@ -160,7 +159,7 @@ public abstract class FastSolution extends Solution {
      * @return The list of integers
      */
     public static int[] parseInts(String str) {
-        List<Integer> ints = new ArrayList<>();
+        IntArrayList ints = new IntArrayList();
         int i = 0, x, len = str.length();
         char c;
         outer: while(true) {
@@ -177,10 +176,9 @@ public abstract class FastSolution extends Solution {
             }
             ints.add(x);
         }
-        int[] arr = new int[ints.size()];
-        for(i=0; i<arr.length; i++)
-            arr[i] = ints.get(i);
-        return arr;
+        if(ints.data.length == ints.size)
+            return ints.data;
+        return Arrays.copyOf(ints.data, ints.size);
     }
 
     /**
@@ -191,7 +189,7 @@ public abstract class FastSolution extends Solution {
      * @return The list of longs
      */
     public static long[] parseLongs(String str) {
-        List<Long> longs = new ArrayList<>();
+        LongArrayList longs = new LongArrayList();
         int i = 0, len = str.length();
         long x;
         char c;
@@ -209,9 +207,8 @@ public abstract class FastSolution extends Solution {
             }
             longs.add(x);
         }
-        long[] arr = new long[longs.size()];
-        for(i=0; i<arr.length; i++)
-            arr[i] = longs.get(i);
-        return arr;
+        if(longs.data.length == longs.size)
+            return longs.data;
+        return Arrays.copyOf(longs.data, longs.size);
     }
 }
