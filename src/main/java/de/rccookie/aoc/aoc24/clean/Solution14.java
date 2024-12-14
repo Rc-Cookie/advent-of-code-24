@@ -1,6 +1,5 @@
 package de.rccookie.aoc.aoc24.clean;
 
-import de.rccookie.aoc.Grid;
 import de.rccookie.aoc.aoc24.util.FastSolution;
 import de.rccookie.math.constInt2;
 import de.rccookie.math.float2;
@@ -15,11 +14,7 @@ public class Solution14 extends FastSolution {
     public Object task1() {
         int hw = WIDTH / 2, hh = HEIGHT / 2;
         long tl = 0, tr = 0, bl = 0, br = 0;
-        Grid grid = new Grid(WIDTH, HEIGHT, '.');
         for(int2 pos : positionsAfter(100)) {
-            if(grid.charAt(pos) == '.')
-                grid.set(pos, '1');
-            else grid.set(pos, (char) (grid.charAt(pos) + 1));
             if(pos.x() < hw) {
                 if(pos.y() < hh) tl++;
                 else if(pos.y() > hh) bl++;
@@ -29,7 +24,6 @@ public class Solution14 extends FastSolution {
                 else if(pos.y() > hh) br++;
             }
         }
-        System.out.println(grid);
         return tl * tr * bl * br;
     }
 
