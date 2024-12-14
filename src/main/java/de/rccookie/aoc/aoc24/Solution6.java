@@ -23,11 +23,6 @@ public class Solution6 extends FastSolution {
         // for equality with 'X', rather than an inequality. We also increment a counter we do so, to
         // count the number of fields visited.
 
-        // In part 1 we actually need to make a copy of the input, since we modify it, which would break
-        // re-running the task for benchmarking purposes. I guess you could also just set all the Xs
-        // back to '.' afterward, which might be faster.
-        char[] chars = this.chars.clone();
-
         int len = chars.length;
         int w = indexOf('\n', 0), w1 = w+1;
 

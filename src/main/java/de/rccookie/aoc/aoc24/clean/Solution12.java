@@ -1,37 +1,38 @@
 package de.rccookie.aoc.aoc24.clean;
 
-import java.util.function.ToLongBiFunction;
+import java.util.function.ToLongFunction;
 
 import de.rccookie.aoc.aoc24.util.FastSolution;
-import de.rccookie.graph.Graph;
-import de.rccookie.graph.Graphs;
 import de.rccookie.math.int2;
 
 public class Solution12 extends FastSolution {
 
     @Override
     public Object task1() {
-        return fencePrice((c,v) -> {
+        return fencePrice((v) -> {
             int border = 0;
-            if(!c.contains(v.added( 1, 0))) border++;
-            if(!c.contains(v.added(-1, 0))) border++;
-            if(!c.contains(v.added( 0, 1))) border++;
-            if(!c.contains(v.added( 0,-1))) border++;
+            char ch = grid.charAt(v);
+            if(ch != grid.charAt(v.added( 1, 0))) border++;
+            if(ch != grid.charAt(v.added(-1, 0))) border++;
+            if(ch != grid.charAt(v.added( 0, 1))) border++;
+            if(ch != grid.charAt(v.added( 0,-1))) border++;
             return border;
         });
     }
 
     @Override
     public Object task2() {
-        return fencePrice((c,v) -> {
-            boolean tl = c.contains(v.added(-1,-1));
-            boolean t =  c.contains(v.added( 0,-1));
-            boolean tr = c.contains(v.added( 1,-1));
-            boolean l =  c.contains(v.added(-1, 0));
-            boolean r =  c.contains(v.added( 1, 0));
-            boolean bl = c.contains(v.added(-1, 1));
-            boolean b =  c.contains(v.added( 0, 1));
-            boolean br = c.contains(v.added( 1, 1));
+        return fencePrice((v) -> {
+
+            char ch = grid.charAt(v);
+            boolean tl = ch == grid.charAt(v.added(-1,-1));
+            boolean t =  ch == grid.charAt(v.added( 0,-1));
+            boolean tr = ch == grid.charAt(v.added( 1,-1));
+            boolean l =  ch == grid.charAt(v.added(-1, 0));
+            boolean r =  ch == grid.charAt(v.added( 1, 0));
+            boolean bl = ch == grid.charAt(v.added(-1, 1));
+            boolean b =  ch == grid.charAt(v.added( 0, 1));
+            boolean br = ch == grid.charAt(v.added( 1, 1));
 
             int corners = 0;
             if((!l && !t) || (l && t && !tl)) corners++;
@@ -42,8 +43,7 @@ public class Solution12 extends FastSolution {
         });
     }
 
-    private long fencePrice(ToLongBiFunction<Graph<int2,?>, int2> tileBorderCost) {
-        Graph<int2,?> g = grid.graphFromChars(false, (a, b) -> a == b);
-        return sum(Graphs.components(g), c -> sum(c, p -> tileBorderCost.applyAsLong(c,p)) * c.size());
+    private long fencePrice(ToLongFunction<int2> tileBorderCost) {
+        return grid.sum(p -> grid.marked(p) ? 0 : sum(grid.floodFill(p).peek(grid::mark), tileBorderCost) * grid.floodFill(p).count());
     }
 }

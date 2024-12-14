@@ -47,7 +47,6 @@ public class Solution6 extends FastSolution {
     }
 
     private void markPath() {
-        grid.clearMarked();
         for(int2 pos = grid.find('^'), dir = new int2(0,-1); grid.inside(pos); pos.add(dir)) {
             if(grid.charAtRaw(pos) == '#') {
                 pos.sub(dir);
