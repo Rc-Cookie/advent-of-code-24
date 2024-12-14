@@ -1,7 +1,6 @@
 package de.rccookie.aoc.aoc24;
 
 import de.rccookie.aoc.aoc24.util.FastSolution;
-import de.rccookie.math.int2;
 
 public class Solution14 extends FastSolution {
 
@@ -114,20 +113,20 @@ public class Solution14 extends FastSolution {
         for(int i=0, stop=Math.max(WIDTH, HEIGHT); i<stop; i++) {
             int avgX = 0, avgY = 0, avgX2 = 0, avgY2 = 0;
 
-            for(int j=0; j<count; j++) {
+            for(int j = 0; j < count; j++) {
                 int x = (x0s[j] + i * dxs[j]) % WIDTH;
                 int y = (y0s[j] + i * dys[j]) % HEIGHT;
                 avgX += x;
                 avgY += y;
-                avgX2 += x*x;
-                avgY2 += y*y;
+                avgX2 += x * x;
+                avgY2 += y * y;
             }
 
             float avgXF = (float) avgX / count;
             float avgYF = (float) avgY / count;
-            float varX = (float) avgX2 / count - avgXF*avgXF;
+            float varX = (float) avgX2 / count - avgXF * avgXF;
             if(varX < 0) varX = -varX;
-            float varY = (float) avgY2 / count - avgYF*avgYF;
+            float varY = (float) avgY2 / count - avgYF * avgYF;
             if(varY < 0) varY = -varY;
 
             if(varX < minVarX) {
@@ -140,31 +139,14 @@ public class Solution14 extends FastSolution {
             }
         }
 
-        int2 mn = extendedEuclideanAlgorithm(HEIGHT, WIDTH);
-        return Math.floorMod(mn.x() * HEIGHT * minX + mn.y() * WIDTH * minY, WIDTH * HEIGHT);
-    }
-
-    public static int2 extendedEuclideanAlgorithm(int a, int b) {
-        int oldR = a, r = b;
-        int oldS = 1, s = 0;
-        int oldT = 0, t = 1;
-
-        while(r != 0) {
-            int q = oldR / r;
-
-            int tmp = r;
-            r = oldR - q * r;
-            oldR = tmp;
-
-            tmp = s;
-            s = oldS - q * s;
-            oldS = tmp;
-
-            tmp = t;
-            t = oldT - q * t;
-            oldT = tmp;
+        while(true) {
+            if(minX < minY)
+                minX += WIDTH;
+            else if(minY < minX)
+                minY += HEIGHT;
+            else break;
         }
 
-        return new int2(oldS,oldT);
+        return minX;
     }
 }
