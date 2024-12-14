@@ -138,6 +138,11 @@ public abstract class FastSolution extends Solution {
         data[i >>> 6] |= 1L << (i & 63);
     }
 
+    public static boolean gsbi(long[] data, int x, int y, int width) {
+        int i = x + width * y;
+        return data[i >>> 6] == (data[i >>> 6] |= 1L << (i & 63));
+    }
+
     public static void sbi(long[] data, int x, int y, int width, int step, int off) {
         int i = (x + width * y) * step + off;
         data[i >>> 6] |= 1L << (i & 63);
@@ -186,7 +191,7 @@ public abstract class FastSolution extends Solution {
     }
 
     /**
-     * Parses a list of integers with arbitrary delimiters into an array using 64 signed
+     * Parses a list of integers with arbitrary delimiters into an array using 64-bit signed
      * integers. Leading and trailing "stuff" will be ignored.
      *
      * @param str The string to parse the list from
