@@ -171,9 +171,16 @@ public abstract class FastSolution extends Solution {
         IntArrayList ints = new IntArrayList();
         int i = 0, x, len = str.length();
         char c;
+        boolean minus;
         outer: while(true) {
             do if(i >= len) break outer;
-            while((c = str.charAt(i++)) < '0' || c > '9');
+            while(((c = str.charAt(i++)) < '0' || c > '9') && c != '-');
+
+            //noinspection AssignmentUsedAsCondition
+            if(minus = c == '-') {
+                if(i >= len) break;
+                if((c = str.charAt(i++)) < '0' || c > '9') continue;
+            }
 
             x = c - '0';
             if(i < len) {
@@ -183,7 +190,7 @@ public abstract class FastSolution extends Solution {
                         break;
                 }
             }
-            ints.add(x);
+            ints.add(minus ? -x : x);
         }
         if(ints.data.length == ints.size)
             return ints.data;
@@ -202,9 +209,16 @@ public abstract class FastSolution extends Solution {
         int i = 0, len = str.length();
         long x;
         char c;
+        boolean minus;
         outer: while(true) {
             do if(i >= len) break outer;
-            while((c = str.charAt(i++)) < '0' || c > '9');
+            while(((c = str.charAt(i++)) < '0' || c > '9') && c != '-');
+
+            //noinspection AssignmentUsedAsCondition
+            if(minus = c == '-') {
+                if(i >= len) break;
+                if((c = str.charAt(i++)) < '0' || c > '9') continue;
+            }
 
             x = c - '0';
             if(i < len) {
@@ -214,7 +228,7 @@ public abstract class FastSolution extends Solution {
                         break;
                 }
             }
-            longs.add(x);
+            longs.add(minus ? -x : x);
         }
         if(longs.data.length == longs.size)
             return longs.data;
