@@ -10,7 +10,6 @@ import de.rccookie.util.MappingIterator;
 public class Solution14 extends FastSolution {
 
     public static final int WIDTH = 101, HEIGHT = 103;
-    public static final int ITERATIONS = 100;
 
     @Override
     public Object task1() {
