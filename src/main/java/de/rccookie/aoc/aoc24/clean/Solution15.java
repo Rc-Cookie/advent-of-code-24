@@ -15,7 +15,7 @@ public class Solution15 extends FastSolution {
 
         for(char instr : parts[1].replace("\n", "").toCharArray()) {
             constInt2 dir = directionVec(instr);
-            if(grid.push(robot, dir, c -> c == 'O') != -1)
+            if(grid.push(robot, dir, 'O') != -1)
                 robot.add(dir);
         }
 
