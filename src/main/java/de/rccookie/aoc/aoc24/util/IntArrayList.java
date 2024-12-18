@@ -35,8 +35,6 @@ public final class IntArrayList implements Iterable<Integer> {
     }
 
     public int get(int index) {
-        if(index >= size)
-            throw new IndexOutOfBoundsException(index);
         return data[index];
     }
 
@@ -47,8 +45,6 @@ public final class IntArrayList implements Iterable<Integer> {
     }
 
     public void add(int index, int x) {
-        if(index < 0 || index > size)
-            throw new IndexOutOfBoundsException(index);
         if(data.length == size)
             data = Arrays.copyOf(data, 2 * size);
         if(index == size)
@@ -61,10 +57,12 @@ public final class IntArrayList implements Iterable<Integer> {
     }
 
     public void remove(int index) {
-        if(index < 0 || index >= size)
-            throw new IndexOutOfBoundsException(index);
         System.arraycopy(data, index + 1, data, index, size - index - 1);
         size--;
+    }
+
+    public int removeLast() {
+        return data[--size];
     }
 
     public void clear() {
