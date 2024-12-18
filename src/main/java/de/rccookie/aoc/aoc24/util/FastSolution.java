@@ -3,6 +3,7 @@ package de.rccookie.aoc.aoc24.util;
 import java.util.Arrays;
 
 import de.rccookie.aoc.Solution;
+import de.rccookie.math.int2;
 
 public abstract class FastSolution extends Solution {
 
@@ -187,6 +188,10 @@ public abstract class FastSolution extends Solution {
         } catch(ArrayIndexOutOfBoundsException e) {
             return str.toString();
         }
+    }
+
+    public int2 vecFromIndex(int index, int width) {
+        return new int2(index % width, index / width);
     }
 
 
