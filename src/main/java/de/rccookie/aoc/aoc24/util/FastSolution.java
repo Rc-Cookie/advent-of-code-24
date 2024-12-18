@@ -159,6 +159,37 @@ public abstract class FastSolution extends Solution {
     }
 
 
+    public static String renderGrid(long[] data, int width, int height) {
+        StringBuilder str = new StringBuilder((width+1) * height);
+
+        int maxW = ((width-1)+"").length();
+        int maxH = ((height-1)+"").length();
+
+        for(int y=maxW; y>0; y--) {
+            str.append(" ".repeat(maxH+2));
+            for(int x=0; x<width; x++) {
+                String s = x+"";
+                str.append(s.length() < y ? ' ' : s.charAt(s.length() - y));
+            }
+            str.append('\n');
+        }
+
+        try {
+            for(int y=0; y<height; y++) {
+                String s = y+"";
+                str.append(" ".repeat(maxH - s.length())).append(s).append("  ");
+                for(int x=0; x<width; x++)
+                    str.append(gbi(data, x, y, width) ? '#' : '.');
+                str.append('\n');
+            }
+
+            return str.substring(0, Math.max(0, str.length() - 1));
+        } catch(ArrayIndexOutOfBoundsException e) {
+            return str.toString();
+        }
+    }
+
+
 
     /**
      * Parses a list of integers with arbitrary delimiters into an array. Leading and trailing
