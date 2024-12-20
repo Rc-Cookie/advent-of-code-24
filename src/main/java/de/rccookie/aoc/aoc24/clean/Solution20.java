@@ -1,12 +1,9 @@
 package de.rccookie.aoc.aoc24.clean;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 import de.rccookie.aoc.aoc24.util.FastSolution;
-import de.rccookie.graph.BinaryHeap;
-import de.rccookie.graph.Heap;
 import de.rccookie.math.int2;
 
 public class Solution20 extends FastSolution {
@@ -26,28 +23,21 @@ public class Solution20 extends FastSolution {
         int2 end = grid.findAndSet('E', '.');
 
         Map<int2, Integer> distances = new HashMap<>();
+        int length = 0;
 
-        for(int2 n : size)
-            if(grid.charAt(n) == '.')
-                distances.put(n, Integer.MAX_VALUE);
-        distances.put(start, 0);
+        int2 prev = start, cur = start;
 
-        Heap<int2> q = new BinaryHeap<>(Comparator.comparing(distances::get));
-        q.enqueue(start);
-
-        while(!q.isEmpty()) {
-            int2 n = q.dequeue();
-            if(n.equals(end)) break;
-
-            int dist = distances.get(n);
-            for(int2 m : grid.adjPos4(n)) {
-                if(grid.charAt(m) != '.' || dist + 1 >= distances.get(m))
+        while(!cur.equals(end)) {
+            distances.put(cur, length++);
+            for(int2 m : grid.adjPos4(cur)) {
+                if(grid.charAt(m) != '.' || m.equals(prev))
                     continue;
-                distances.put(m, dist + 1);
-                if(!q.updateDecreased(m))
-                    q.enqueue(m);
+                prev = cur;
+                cur = m;
+                break;
             }
         }
+        distances.put(end, length);
 
         return grid.sum(p -> {
             if(grid.charAt(p) != '.')
