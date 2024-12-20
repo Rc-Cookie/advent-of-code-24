@@ -43,8 +43,7 @@ public class Solution20 extends FastSolution {
             for(int2 m : grid.adjPos4(n)) {
                 if(grid.charAt(m) != '.' || dist + 1 >= distances.get(m))
                     continue;
-                distances.put(m, dist + 1
-                );
+                distances.put(m, dist + 1);
                 if(!q.updateDecreased(m))
                     q.enqueue(m);
             }
