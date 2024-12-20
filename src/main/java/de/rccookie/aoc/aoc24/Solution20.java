@@ -157,8 +157,8 @@ public class Solution20 extends FastSolution {
         bytes[start] = bytes[end] = '.';
 
         int[] distances = new int[bytes.length];
-        int length = 0;
 
+        int length = 0;
         int prev = start, cur = start;
 
         while(cur != end) {
@@ -203,55 +203,55 @@ public class Solution20 extends FastSolution {
             int highY = Math.min(height - pY - 1, maxLen);
             int q;
 
-            if(lowX != maxLen || highX != maxLen || lowY != maxLen || highY != maxLen) {
+            if(lowX < maxLen || highX < maxLen || lowY < maxLen || highY < maxLen) {
 
                 int q0 = p - width1;
                 for(int dy=2; dy<=lowY; dy++) { // top
                     q0 -= width1;
                     int stop1 = Math.min(maxLen - dy, lowX);
                     for(int dx=1; dx<=stop1; dx++) // left
-                        if(bytes[q = q0 - dx] == '.' && distances[q] - dist - dx - dy >= minCut) ++count;
+                        if(distances[q0 - dx] - dist - dx - dy >= minCut) ++count;
                     int stop2 = Math.min(maxLen - dy, highX);
                     for(int dx=1; dx<=stop2; dx++) // right
-                        if(bytes[q = q0 + dx] == '.' && distances[q] - dist - dx - dy >= minCut) ++count;
+                        if(distances[q0 + dx] - dist - dx - dy >= minCut) ++count;
                 }
                 q0 = p + width1;
                 for(int dy=2; dy<=highY; dy++) { // bottom
                     q0 += width1;
                     int stop1 = Math.min(maxLen - dy, lowX);
                     for(int dx=1; dx<=stop1; dx++) // left
-                        if(bytes[q = q0 - dx] == '.' && distances[q] - dist - dx - dy >= minCut) ++count;
+                        if(distances[q0 - dx] - dist - dx - dy >= minCut) ++count;
                     int stop2 = Math.min(maxLen - dy, highX);
                     for(int dx=1; dx<=stop2; dx++) // right
-                        if(bytes[q = q0 + dx] == '.' && distances[q] - dist - dx - dy >= minCut) ++count;
+                        if(distances[q0 + dx] - dist - dx - dy >= minCut) ++count;
                 }
 
                 if(lowY != 0) { // top
                     q0 = p - width1;
                     for(int dx=2; dx<lowX; dx++) // left
-                        if(bytes[q = q0-dx] == '.' && distances[q] - dist - dx - 1 >= minCut) ++count;
+                        if(distances[q0 - dx] - dist - dx - 1 >= minCut) ++count;
                     for(int dx=2; dx<highX; dx++) // right
-                        if(bytes[q = q0+dx] == '.' && distances[q] - dist - dx - 1 >= minCut) ++count;
+                        if(distances[q0 + dx] - dist - dx - 1 >= minCut) ++count;
                 }
                 if(highY != 0) { // bottom
                     q0 = p + width1;
                     for(int dx=2; dx<lowX; dx++) // left
-                        if(bytes[q = q0-dx] == '.' && distances[q] - dist - dx - 1 >= minCut) ++count;
+                        if(distances[q0 - dx] - dist - dx - 1 >= minCut) ++count;
                     for(int dx=2; dx<highX; dx++) // right
-                        if(bytes[q = q0+dx] == '.' && distances[q] - dist - dx - 1 >= minCut) ++count;
+                        if(distances[q0 + dx] - dist - dx - 1 >= minCut) ++count;
                 }
 
                 for(int dx=2; dx<=lowX; dx++) // left
-                    if(bytes[q = p-dx] == '.' && distances[q] - dist - dx >= minCut) ++count;
+                    if(distances[p - dx] - dist - dx >= minCut) ++count;
                 for(int dx=2; dx<=highX; dx++) // right
-                    if(bytes[q = p+dx] == '.' && distances[q] - dist - dx >= minCut) ++count;
+                    if(distances[p + dx] - dist - dx >= minCut) ++count;
 
                 q = p - width1;
                 for(int dy=2; dy<=lowY; dy++) // top
-                    if(bytes[q -= width1] == '.' && distances[q] - dist - dy >= minCut) ++count;
+                    if(distances[q -= width1] - dist - dy >= minCut) ++count;
                 q = p + width1;
                 for(int dy=2; dy<=highY; dy++) // bottom
-                    if(bytes[q += width1] == '.' && distances[q] - dist - dy >= minCut) ++count;
+                    if(distances[q += width1] - dist - dy >= minCut) ++count;
             }
             else {
                 int q0 = p - width1, q1 = p + width1;
@@ -259,25 +259,25 @@ public class Solution20 extends FastSolution {
                     q0 -= width1;
                     q1 += width1;
                     for(int dx=1; dx<=maxLen - dy; dx++) {
-                        if(bytes[q = q0 - dx] == '.' && distances[q] - dist - dx - dy >= minCut) ++count;
-                        if(bytes[q = q1 - dx] == '.' && distances[q] - dist - dx - dy >= minCut) ++count;
-                        if(bytes[q = q0 + dx] == '.' && distances[q] - dist - dx - dy >= minCut) ++count;
-                        if(bytes[q = q1 + dx] == '.' && distances[q] - dist - dx - dy >= minCut) ++count;
+                        if(distances[q0 - dx] - dist - dx - dy >= minCut) ++count;
+                        if(distances[q1 - dx] - dist - dx - dy >= minCut) ++count;
+                        if(distances[q0 + dx] - dist - dx - dy >= minCut) ++count;
+                        if(distances[q1 + dx] - dist - dx - dy >= minCut) ++count;
                     }
                 }
                 q0 = p - width1;
                 q1 = p + width1;
                 for(int dx=2; dx<maxLen; dx++) {
-                    if(bytes[q = q0 - dx] == '.' && distances[q] - dist - dx - 1 >= minCut) ++count;
-                    if(bytes[q = q0 + dx] == '.' && distances[q] - dist - dx - 1 >= minCut) ++count;
-                    if(bytes[q = q1 - dx] == '.' && distances[q] - dist - dx - 1 >= minCut) ++count;
-                    if(bytes[q = q1 + dx] == '.' && distances[q] - dist - dx - 1 >= minCut) ++count;
+                    if(distances[q0 - dx] - dist - dx - 1 >= minCut) ++count;
+                    if(distances[q0 + dx] - dist - dx - 1 >= minCut) ++count;
+                    if(distances[q1 - dx] - dist - dx - 1 >= minCut) ++count;
+                    if(distances[q1 + dx] - dist - dx - 1 >= minCut) ++count;
                 }
                 for(int d=2; d<=maxLen; d++) {
-                    if(bytes[q = p-d] == '.' && distances[q] - dist - d >= minCut) ++count;
-                    if(bytes[q = p+d] == '.' && distances[q] - dist - d >= minCut) ++count;
-                    if(bytes[q0 -= width1] == '.' && distances[q0] - dist - d >= minCut) ++count;
-                    if(bytes[q1 += width1] == '.' && distances[q1] - dist - d >= minCut) ++count;
+                    if(distances[p - d] - dist - d >= minCut) ++count;
+                    if(distances[p + d] - dist - d >= minCut) ++count;
+                    if(distances[q0 -= width1] - dist - d >= minCut) ++count;
+                    if(distances[q1 += width1] - dist - d >= minCut) ++count;
                 }
             }
 
