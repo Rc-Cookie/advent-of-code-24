@@ -3,6 +3,7 @@ package de.rccookie.aoc.aoc24.util;
 import java.util.Arrays;
 
 import de.rccookie.aoc.Solution;
+import de.rccookie.math.constInt2;
 import de.rccookie.math.int2;
 
 public abstract class FastSolution extends Solution {
@@ -21,14 +22,14 @@ public abstract class FastSolution extends Solution {
     }
 
     public final int eol(int from) {
-        return indexOf('\n', from, chars.length);
+        return indexOf((byte) '\n', from, chars.length);
     }
 
-    public final int indexOf(char c, int from) {
+    public final int indexOf(byte c, int from) {
         return indexOf(c, from, chars.length);
     }
 
-    public final int indexOf(char c, int from, int to) {
+    public final int indexOf(byte c, int from, int to) {
         while(chars[from] != c) {
             from++;
             if(from == to)
@@ -192,6 +193,10 @@ public abstract class FastSolution extends Solution {
 
     public int2 vecFromIndex(int index, int width) {
         return new int2(index % width, index / width);
+    }
+
+    public int vecToIndex(constInt2 v, int width) {
+        return v.x() + width * v.y();
     }
 
 

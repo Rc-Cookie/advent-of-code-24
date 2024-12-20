@@ -46,7 +46,7 @@ public class Solution17 extends FastSolution {
 
     @Override
     public Object task2() {
-        int pos = indexOf('\n', 0) + 39;
+        int pos = eol(0) + 39;
 
         x = chars[pos + 6] - '0';
 

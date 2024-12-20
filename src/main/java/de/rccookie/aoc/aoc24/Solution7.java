@@ -26,7 +26,7 @@ public class Solution7 extends FastSolution {
             while(chars[pos] >= '0' && chars[pos] <= '9')
                 first = 10 * first + chars[pos++] - '0';
 
-            numCount = count(' ', pos, indexOf('\n', pos));
+            numCount = count(' ', pos, eol(pos));
 
             for(i=0; i<numCount; i++) {
                 pos++;
@@ -72,7 +72,7 @@ public class Solution7 extends FastSolution {
             while(chars[pos] >= '0' && chars[pos] <= '9')
                 first = 10 * first + chars[pos++] - '0';
 
-            numCount = count(' ', pos, indexOf('\n', pos));
+            numCount = count(' ', pos, eol(pos));
 
             for(i=0; i<numCount; i++) {
                 pos++;

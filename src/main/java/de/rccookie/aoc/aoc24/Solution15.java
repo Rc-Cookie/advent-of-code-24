@@ -13,7 +13,7 @@ public class Solution15 extends FastSolution {
     public Object task1() {
         int len = chars.length;
 
-        int width = indexOf('\n', 0);
+        int width = eol(0);
         down = width + 1;
         up = -down;
         int[] directions = new int[128];
@@ -27,7 +27,7 @@ public class Solution15 extends FastSolution {
             instr += down;
         ++instr;
 
-        int robot = indexOf('@', 0);
+        int robot = indexOf((byte) '@', 0);
         chars[robot] = '.';
 
         char c;
@@ -63,7 +63,7 @@ public class Solution15 extends FastSolution {
 
         int len = chars.length;
 
-        int width = indexOf('\n', 0);
+        int width = eol(0);
         down = (width << 1) + 1;
         up = -down;
         int[] directions = new int[128];

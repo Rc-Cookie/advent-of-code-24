@@ -9,7 +9,7 @@ public class Solution4 extends FastSolution {
     private int width, height, tl, tr, bl, br, r, b;
 
     private void init() {
-        width = indexOf('\n', 0);
+        width = eol(0);
         height = (chars.length + 1) / (width + 1);
         tl = -width - 2;
         tr = -width;

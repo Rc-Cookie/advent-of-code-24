@@ -24,9 +24,9 @@ public class Solution6 extends FastSolution {
         // count the number of fields visited.
 
         int len = chars.length;
-        int w = indexOf('\n', 0), w1 = w+1;
+        int w = eol(0), w1 = w+1;
 
-        int pos = indexOf('^', 0);
+        int pos = indexOf((byte) '^', 0);
         // Mark the starting position with 'X', such that we won't miscount in case we loop back over it
         chars[pos] = 'X';
 
@@ -95,10 +95,10 @@ public class Solution6 extends FastSolution {
         // Cache the length, memory locality
         int len = chars.length;
         // Width of the grid, and width of a line (which is the width of the grid + '\n')
-        int w = indexOf('\n', 0), w1 = w+1;
+        int w = eol(0), w1 = w+1;
 
         // Find the start position
-        int start = indexOf('^', 0);
+        int start = indexOf((byte) '^', 0);
         // Cursor for keeping track of the current position. We don't use explicit x and y
         // coordinates but rather use the index in the raw string directly. To read a value
         // from the array, we otherwise always had to recompute the index, this way we avoid

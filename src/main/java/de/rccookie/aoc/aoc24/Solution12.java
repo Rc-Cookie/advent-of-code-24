@@ -9,7 +9,7 @@ public class Solution12 extends FastSolution {
     public Object task1() {
 
         char[] chars = this.chars;
-        int w = indexOf('\n', 0), w1 = w + 1;
+        int w = eol(0), w1 = w + 1;
         int len = (chars.length + 1) / w1 * w1 - 1;
 
         long total = 0;
@@ -58,7 +58,7 @@ public class Solution12 extends FastSolution {
     public Object task2() {
 
         char[] chars = this.chars;
-        int w = indexOf('\n', 0), w1 = w + 1, w2 = w1 + 1;
+        int w = eol(0), w1 = w + 1, w2 = w1 + 1;
         int len = (chars.length + 1) / w1 * w1 - 1;
 
         long total = 0;

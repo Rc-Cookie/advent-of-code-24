@@ -11,7 +11,7 @@ public class Solution16 extends FastSolution {
     @Override
     public Object task1() {
 
-        int realWidth1 = indexOf('\n', 0) + 1;
+        int realWidth1 = eol(0) + 1;
         int realHeight = (chars.length+1) / realWidth1;
 
         assert realWidth1 % 2 == 0;
@@ -69,7 +69,7 @@ public class Solution16 extends FastSolution {
     @Override
     public Object task2() {
 
-        int realWidth1 = indexOf('\n', 0) + 1;
+        int realWidth1 = eol(0) + 1;
         int realHeight = (chars.length+1) / realWidth1;
 
         assert realWidth1 % 2 == 0;
