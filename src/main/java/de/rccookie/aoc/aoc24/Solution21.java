@@ -5,6 +5,40 @@ import de.rccookie.aoc.aoc24.util.FastSolution;
 @SuppressWarnings({"SpellCheckingInspection", "CommentedOutCode"})
 public class Solution21 extends FastSolution {
 
+    /*
+     * Key optimization stategies:
+     *
+     *  - Write out all shortest paths between each pair of keys by hand.
+     *  - Since after executing a path, we always press 'A', we already include that suffix in the predefined paths
+     *  - When simulating a path, we always look at two consecutive buttons, and try to find the best path for the
+     *    next higher robot keypad. Since we always start with the cursor at 'A', we also include this prefix in
+     *    each path.
+     *  - The paths are encoded as integers. We have 4 directions + 'A', meaning 3 bit per entry. We then simply
+     *    concatenate those entries with bit shifts:
+     *
+     *       100_010_000_100
+     *       'A' '<' '^' 'A' === A^<A
+     *
+     *    The paths are encoded "in reverse", that makes iterating over them easier: we simply shift 3 bits down
+     *    after each iteration until the remaining number is 'A' = 4. The previous and current button can then be
+     *    extracted by taking the 6 least significant bits (x & 0b111111 === x & 63). These then serve as index at
+     *    which to find the button sequence to move between the two buttons in the paths array. Note that this 6
+     *    bit index still contains the two buttons "in reverse", thus they also initially written to cur << 3 | prev.
+     *  - The encoded paths technically encode their number of buttons contained, but to count them we had to loop
+     *    to determine the number of 3-bit sets that are non-zero. Thus, we precalculate and store the lengths in a
+     *    separate array (remember that the leading 'A' isn't really there, thus the length is 1 shorter). For the
+     *    paths on the numeric keypad don't need lengths asserting that there is always at least 1 robot involved.
+     *  - For caching, we use the 6 bits encoding the button transition as key, together with the proxy depth. We
+     *    concatenate these caches in a single array, so a cache key is calculated as key = 64 << proxyCount | transition.
+     *  - Since the cache array needs to be dynamically allocated, we keep it as a local variable rather than as a
+     *    field. This allows Java to allocate it on the stack rather than on the heap, reducing the allocation cost
+     *    to a minimum.
+     *  - The numeric keypad paths are encoded separately, as they require 4 bit per button, which would otherwise
+     *    force us to use 4 bit steps for directional keypads as well, resulting in larger indices and the cache
+     *    array would have to be larger (without actually containing any more information, just 0s). For that reason
+     *    we also don't cache the top level results on the directional keypad.
+     */
+
     private static final int[] NUMERIC_PATHS = { 36, 2140, 268, 2132, 16988, 2124, 16980, 135772, 16972, 135764, 276, 0, 0, 0, 0, 0, 2180, 36, 276, 2196, 268, 2132, 17044, 2124, 16980, 135828, 17540, 0, 0, 0, 0, 0, 260, 284, 36, 276, 2252, 268, 2132, 17996, 2124, 16980, 2068, 0, 0, 0, 0, 0, 2244, 2268, 284, 36, 18124, 2252, 268, 144972, 17996, 2124, 260, 0, 0, 0, 0, 0, 17412, 260, 2068, 16532, 36, 276, 2196, 268, 2132, 17044, 140292, 0, 0, 0, 0, 0, 2052, 2244, 260, 2068, 284, 36, 276, 2252, 268, 2132, 16404, 0, 0, 0, 0, 0, 17924, 18116, 2244, 260, 2268, 284, 36, 18124, 2252, 268, 2052, 0, 0, 0, 0, 0, 139268, 2052, 16404, 131220, 260, 2068, 16532, 36, 276, 2196, 1122308, 0, 0, 0, 0, 0, 16388, 17924, 2052, 16404, 2244, 260, 2068, 284, 36, 276, 131092, 0, 0, 0, 0, 0, 143364, 144900, 17924, 2052, 18116, 2244, 260, 2268, 284, 36, 16388, 0, 0, 0, 0, 0, 284, 17116, 2140, 268, 135900, 17996, 2124, 1086172, 143948, 16972, 36 };
     private static final int[] DIRECTIONAL_PATHS = { 36, 260, 2076, 2068, 276, 0, 0, 0, 268, 36, 284, 276, 2132, 0, 0, 0, 2188, 276, 36, 2196, 17548, 0, 0, 0, 2252, 284, 2268, 36, 268, 0, 0, 0, 284, 2244, 16604, 260, 36 };
     private static final int[] DIRECTIONAL_LENGTHS = { 1, 2, 3, 3, 2, 0, 0, 0, 2, 1, 2, 2, 3, 0, 0, 0, 3, 2, 1, 3, 4, 0, 0, 0, 3, 2, 3, 1, 2, 0, 0, 0, 2, 3, 4, 2, 1 };
