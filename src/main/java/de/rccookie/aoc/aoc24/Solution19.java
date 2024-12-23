@@ -1,7 +1,5 @@
 package de.rccookie.aoc.aoc24;
 
-import java.util.Arrays;
-
 import de.rccookie.aoc.aoc24.util.FastSolution;
 import de.rccookie.json.Json;
 
@@ -11,10 +9,7 @@ public class Solution19 extends FastSolution {
     private String[] patternsStr;
     private int[] available;
     private int[] availableMask;
-    private long[][] patternsAligned, patternsOffset;
-    private final boolean[] cached = new boolean[64];
-    private final boolean[] possibleCache = new boolean[64];
-    private final long[] combinationsCache = new long[64];
+    private int[] availableLengths;
 
     @Override
     public void load() {
@@ -23,15 +18,24 @@ public class Solution19 extends FastSolution {
         patternsStr = parts[1].split("\n");
 
         available = new int[availableStr.length];
+        availableMask = new int[available.length];
+        availableLengths = new int[available.length];
+
         for(int i=0; i<availableStr.length; i++) {
             String s = availableStr[i];
-        }
-        available = Arrays.stream(availableStr).mapToInt(s -> {
+            int len = s.length();
+
             int a = 0;
-            for(int j=0; j<s.length(); j++)
+            int m = 0;
+            for(int j=0; j<len; j++) {
                 a |= encode((byte) s.charAt(j)) << 3 * j;
-            return a;
-        }).toArray();
+                m |= 0b111 << 3 * j;
+            }
+
+            available[i] = a;
+            availableMask[i] = m;
+            availableLengths[i] = len;
+        }
     }
 
     private static int encode(byte c) {
@@ -47,79 +51,65 @@ public class Solution19 extends FastSolution {
 
     @Override
     public Object task1() {
-        return count(patternsStr, pattern -> {
-            Arrays.fill(cached, false);
-            return isPossible(pattern, 0);
-        });
+        return count(patternsStr, p -> combinations(p) != 0);
     }
 
     @Override
     public Object task2() {
-        return sum(patternsStr, pattern -> {
-
-            long[] aligned = new long[(pattern.length() * 3 + 63) / 64];
-            long[] offset = new long[aligned.length + 1];
-
-            for(int i=0; i<pattern.length(); i++) {
-                long c = encode((byte) pattern.charAt(i));
-                int start = 3*i, end = start + 2;
-                int startChunk = start / 64, endChunk = end / 64;
-
-                aligned[startChunk] |= c << (start & 63);
-                if(startChunk != endChunk)
-                    aligned[endChunk] |= c >> 64 - (start & 63);
-            }
-
-            for(int i=0; i<pattern.length(); i++) {
-                long c = encode((byte) pattern.charAt(i));
-                int start = 3*i + 32, end = start + 2;
-                int startChunk = start / 64, endChunk = end / 64;
-
-                offset[startChunk] |= c << (start & 63);
-                if(startChunk != endChunk)
-                    offset[endChunk] |= c >> 64 - (start & 63);
-            }
-
-
-
-            int len = pattern.length();
-            long[] combinations = new long[len+1];
-            combinations[0] = 1;
-
-            for(int i=1; i<=len; i++)
-                for(String a : availableStr)
-                    if(pattern.startsWith(a, len - i))
-                        combinations[i] += combinations[i - a.length()];
-
-            return combinations[len];
-
-//            Arrays.fill(cached, false);
-//            return countCombinations(pattern, 0);
-        });
+        return sum(patternsStr, this::combinations);
     }
 
-    int test = 0;
-    private boolean isPossible(String pattern, int offset) {
-        if(offset == pattern.length())
-            return true;
-        if(cached[offset])
-            return possibleCache[offset];
-        for(String a : availableStr)
-            if(pattern.startsWith(a, offset) && isPossible(pattern, offset + a.length()))
-                return possibleCache[offset] = cached[offset] = true;
-        cached[offset] = true;
-        return possibleCache[offset] = false;
+    private long combinations(String pattern) {
+        int len = pattern.length();
+
+        long[] aligned = new long[(len * 3 + 63) / 64];
+        long[] offset = new long[aligned.length + 1];
+
+        for(int i=0; i<len; i++) {
+            long c = encode((byte) pattern.charAt(i));
+
+            int start = 3*i;
+            aligned[start >>> 6] |= c << (start & 63);
+
+            start += 32;
+            offset[start >>> 6] |= c << (start & 63);
+        }
+
+
+
+        long[] combinations = new long[len+1];
+        combinations[0] = 1;
+
+        for(int i=0; i<len; i++) {
+            if(combinations[i] == 0) continue;
+
+            int i3 = 3 * i;
+            int i3mod64 = i3 & 63;
+
+            long patternSection;
+            if(i3mod64 >= 32)
+                patternSection = offset[(i3 + 32) >>> 6] >> (i3mod64 ^ 32);
+            else patternSection = aligned[i3 >>> 6] >>> i3mod64;
+
+            for(int j=0; j<available.length; j++)
+                if((patternSection & availableMask[j]) == available[j])
+                    combinations[i + availableLengths[j]] += combinations[i];
+        }
+
+        return combinations[len];
     }
 
-    private long countCombinations(String pattern, int offset) {
-        if(offset == pattern.length())
-            return 1;
-        if(cached[offset])
-            return combinationsCache[offset];
+//    private static String bin(long x) {
+//        String str = Long.toBinaryString(x);
+//        str = "0".repeat((str.length() + 2) / 3 * 3 - str.length()) + str;
+//        StringBuilder s = new StringBuilder();
+//        for(int i=0; i<str.length(); i+=3)
+//            s.append(str, i, i+3).append('|');
+//        return s.substring(0, s.length() - 1);
+//    }
 
-        long combinations = sum(availableStr, a -> pattern.startsWith(a, offset) ? countCombinations(pattern, offset + a.length()) : 0);
-        cached[offset] = true;
-        combinationsCache[offset] = combinations;
-        return combinations;
-    }
+//    private static final class Trie {
+//        final int[] next = new int[5];
+//        boolean isWord = false;
+//    }
 }
