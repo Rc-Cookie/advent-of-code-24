@@ -1,115 +1,90 @@
 package de.rccookie.aoc.aoc24;
 
+import java.util.Arrays;
+
 import de.rccookie.aoc.aoc24.util.FastSolution;
-import de.rccookie.json.Json;
+import de.rccookie.aoc.aoc24.util.IntTrie;
 
 public class Solution19 extends FastSolution {
 
-    private String[] availableStr;
-    private String[] patternsStr;
-    private int[] available;
-    private int[] availableMask;
-    private int[] availableLengths;
+    // Inspired by https://github.com/maneatingape/advent-of-code-rust/blob/main/src/year2024/day19.rs
+
+    private static final int[] ENCODING = new int[128];
+    static {
+        ENCODING['b'] = 1;
+        ENCODING['g'] = 2;
+        ENCODING['r'] = 3;
+        ENCODING['u'] = 4;
+        ENCODING['w'] = 5;
+    }
+
+    private IntTrie trie;
+    private int patternsStart;
 
     @Override
     public void load() {
-        String[] parts = input.split("\n\n");
-        availableStr = parts[0].split("\\s*,\\s*");
-        patternsStr = parts[1].split("\n");
+        trie = new IntTrie(6);
+        int pos = 0;
+        byte c;
+        do {
+            int n = trie.afterOrGenerate(trie.root(), ENCODING[bytes[pos]]);
+            while((c = bytes[++pos]) >= 'a')
+                n = trie.afterOrGenerate(n, ENCODING[c]);
+            trie.increment(n);
+            pos += 2;
+        } while(c != '\n');
 
-        available = new int[availableStr.length];
-        availableMask = new int[available.length];
-        availableLengths = new int[available.length];
-
-        for(int i=0; i<availableStr.length; i++) {
-            String s = availableStr[i];
-            int len = s.length();
-
-            int a = 0;
-            int m = 0;
-            for(int j=0; j<len; j++) {
-                a |= encode((byte) s.charAt(j)) << 3 * j;
-                m |= 0b111 << 3 * j;
-            }
-
-            available[i] = a;
-            availableMask[i] = m;
-            availableLengths[i] = len;
-        }
-    }
-
-    private static int encode(byte c) {
-        return switch(c) {
-            case 'b' -> 1;
-            case 'g' -> 2;
-            case 'r' -> 3;
-            case 'u' -> 4;
-            case 'w' -> 5;
-            default -> throw new AssertionError(Json.escape((char) c));
-        };
+        patternsStart = pos;
     }
 
     @Override
     public Object task1() {
-        return count(patternsStr, p -> combinations(p) != 0);
+        return countOrSumCombinations(false);
     }
 
     @Override
     public Object task2() {
-        return sum(patternsStr, this::combinations);
+        return countOrSumCombinations(true);
     }
 
-    private long combinations(String pattern) {
-        int len = pattern.length();
+    private long countOrSumCombinations(boolean sum) {
+        long total = 0;
+        long[] combinations = new long[65];
+        int[] encoded = new int[64];
 
-        long[] aligned = new long[(len * 3 + 63) / 64];
-        long[] offset = new long[aligned.length + 1];
+        int pos = patternsStart;
+        while(pos < bytes.length) {
+            int end = eol(pos);
 
-        for(int i=0; i<len; i++) {
-            long c = encode((byte) pattern.charAt(i));
+            long c = combinations(pos, end, combinations, encoded);
+            if(sum) total += c;
+            else if(c != 0) ++total;
 
-            int start = 3*i;
-            aligned[start >>> 6] |= c << (start & 63);
-
-            start += 32;
-            offset[start >>> 6] |= c << (start & 63);
+            pos = end + 1;
         }
 
+        return total;
+    }
 
+    private long combinations(int from, int to, long[] combinations, int[] encoded) {
+        int len = to - from;
 
-        long[] combinations = new long[len+1];
+        Arrays.fill(combinations, 1, to - from + 1, 0);
         combinations[0] = 1;
+
+        for(int i=0; i<len; i++)
+            encoded[i] = ENCODING[bytes[i + from]];
 
         for(int i=0; i<len; i++) {
             if(combinations[i] == 0) continue;
 
-            int i3 = 3 * i;
-            int i3mod64 = i3 & 63;
-
-            long patternSection;
-            if(i3mod64 >= 32)
-                patternSection = offset[(i3 + 32) >>> 6] >> (i3mod64 ^ 32);
-            else patternSection = aligned[i3 >>> 6] >>> i3mod64;
-
-            for(int j=0; j<available.length; j++)
-                if((patternSection & availableMask[j]) == available[j])
-                    combinations[i + availableLengths[j]] += combinations[i];
+            int t = trie.root();
+            for(int j=i; j<len; j++) {
+                if((t = trie.after(t, encoded[j])) == 0) break;
+                combinations[j + 1] += trie.count(t) * combinations[i];
+            }
         }
 
         return combinations[len];
     }
-
-//    private static String bin(long x) {
-//        String str = Long.toBinaryString(x);
-//        str = "0".repeat((str.length() + 2) / 3 * 3 - str.length()) + str;
-//        StringBuilder s = new StringBuilder();
-//        for(int i=0; i<str.length(); i+=3)
-//            s.append(str, i, i+3).append('|');
-//        return s.substring(0, s.length() - 1);
-//    }
-
-//    private static final class Trie {
-//        final int[] next = new int[5];
-//        boolean isWord = false;
-//    }
 }
